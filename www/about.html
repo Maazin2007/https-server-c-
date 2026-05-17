@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — C++ HTTP Server</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: rgba(255,255,255,0.08);
+    --accent: #00ff87;
+    --accent2: #00c4ff;
+    --text: #f0f0f0;
+    --muted: #888;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--display);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .page {
+    padding-top: 100px;
+    padding-bottom: 5rem;
+  }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .intro {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    font-weight: 400;
+    border-left: 2px solid var(--accent);
+    padding-left: 1.5rem;
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 3rem;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    padding-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .step-content h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .step-content p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 3rem 0;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .qa {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .qa-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+
+  .qa-q {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  .qa-a {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  .stack {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+
+  .stack-item {
+    background: var(--surface);
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stack-key {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .stack-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  footer {
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .footer-text {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  .footer-text a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2rem; }
+    .stack { grid-template-columns: 1fr; }
+    .step { grid-template-columns: 60px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">./server</span>
+  <ul class="nav-links">
+    <li><a href="/">home</a></li>
+    <li><a href="/about">about</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+  <div class="container">
+
+    <div class="section-tag">// about this project</div>
+    <h1>Built from<br><span>first principles</span></h1>
+
+    <p class="intro">
+      Most developers use frameworks that abstract away networking entirely.
+      This project does the opposite — every layer is hand-written, from the
+      TCP socket to the HTTP response headers. The goal was to understand
+      what actually happens when a browser makes a request.
+    </p>
+
+    <div class="section-tag">// how it was built</div>
+    <h2>Build order</h2>
+
+    <div class="timeline">
+      <div class="step">
+        <span class="step-num">STEP 01</span>
+        <div class="step-content">
+          <h3>TCP socket</h3>
+          <p>Started with socket(), bind(), listen(), accept(). Got a raw "Hello World" response working over curl before touching HTTP at all.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">STEP 02</span>
+        <div class="step-content">
+          <h3>HTTP parsing</h3>
+          <p>Read the raw request bytes, extracted the first line, split by spaces to get method and path. No regex, just string operations.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">STEP 03</span>
+        <div class="step-content">
+          <h3>File serving</h3>
+          <p>Mapped URL paths to the /www directory. Used ifstream to read files, built proper HTTP/1.1 responses with Content-Type headers.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">STEP 04</span>
+        <div class="step-content">
+          <h3>Multithreading</h3>
+          <p>Moved client handling into its own function. Spawn a detached std::thread per connection so the accept loop never blocks.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">STEP 05</span>
+        <div class="step-content">
+          <h3>Graceful shutdown</h3>
+          <p>Registered a SIGINT/SIGTERM handler. Sets atomic&lt;bool&gt; running to false, closes the server socket to unblock accept(), exits cleanly.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">STEP 06</span>
+        <div class="step-content">
+          <h3>AWS deployment</h3>
+          <p>Compiled on an EC2 Ubuntu instance, opened port 8080 in the security group. This page is being served by that machine right now.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-tag">// interview prep</div>
+    <h2>Questions I can answer</h2>
+
+    <div class="qa">
+      <div class="qa-item">
+        <div class="qa-q">Q: why a thread per client instead of async I/O?</div>
+        <div class="qa-a">Thread per client is simpler to reason about and sufficient for demonstrating concurrency. The next step would be a thread pool to bound resource usage, or epoll-based async I/O for production scale.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">Q: where could a race condition occur?</div>
+        <div class="qa-a">The cout logging in handleClient — multiple threads writing to stdout simultaneously can interleave output. Fix: wrap cout calls in a std::mutex lock_guard.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">Q: what does accept() actually do?</div>
+        <div class="qa-a">It blocks the thread until a client connects, then returns a new file descriptor for that specific connection. The original server fd stays open and keeps listening for the next client.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">Q: why atomic&lt;bool&gt; for the running flag?</div>
+        <div class="qa-a">The main thread reads it in the while loop, the signal handler writes it. Two threads touching the same variable simultaneously without synchronization is a data race. atomic guarantees the read/write is indivisible.</div>
+      </div>
+    </div>
+
+    <div class="section-tag">// stack</div>
+    <h2>Tech used</h2>
+
+    <div class="stack">
+      <div class="stack-item">
+        <span class="stack-key">language</span>
+        <span class="stack-val">C++17</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-key">networking</span>
+        <span class="stack-val">POSIX sockets</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-key">threading</span>
+        <span class="stack-val">std::thread</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-key">build</span>
+        <span class="stack-val">g++ / CMake</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-key">deployment</span>
+        <span class="stack-val">AWS EC2</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-key">platform</span>
+        <span class="stack-val">Ubuntu 24</span>
+      </div>
+    </div>
+
+    <footer>
+      <p class="footer-text">
+        <a href="/">← back to home</a> &nbsp;·&nbsp; <a href="https://github.com" target="_blank">view source on github</a>
+      </p>
+    </footer>
+
+  </div>
+</div>
+
+</body>
+</html>
