@@ -8,7 +8,7 @@ Built as a systems programming project to understand what actually happens under
 
 ## Demo
 
-> Live on AWS EC2 — `http://<your-ec2-ip>:8080`
+> Live on AWS EC2 — `http://18.223.122.138:8080`
 
 ---
 
