@@ -3,7 +3,6 @@
 #include <atomic>
 #include <unistd.h>
 #include "../include/server.h"
-#include <include/server.h>
 using namespace std;
 
 atomic<bool> running(true);
