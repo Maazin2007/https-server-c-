@@ -1,0 +1,11 @@
+# compiled binary
+server
+
+# VS Code
+.vscode/
+
+# object files
+*.o
+
+# nohup log
+nohup.out
